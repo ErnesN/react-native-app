@@ -47,11 +47,15 @@ const styles = StyleSheet.create({
     letterSpacing: 0.01,
   },
   input: {
+    height: 50,
     borderWidth: 1,
     borderColor: "#E8E8E8",
     borderRadius: 8,
     marginHorizontal: 16,
-
     backgroundColor: "#F6F6F6",
+    paddingHorizontal: 16,
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#BDBDBD",
   },
 });
