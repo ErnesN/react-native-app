@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const initialState = {
   login: "",
@@ -19,18 +21,35 @@ const initialState = {
   password: "",
 };
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RegistrationScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
-
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+  });
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setState(initialState);
   };
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={onLayoutRootView}>
         <ImageBackground
           style={styles.bcgimage}
           source={require("../assets/images/Photo-BG.jpg")}
@@ -132,6 +151,7 @@ const styles = StyleSheet.create({
     top: -60,
   },
   title: {
+    fontFamily: "Roboto-Medium",
     marginBottom: 30,
     marginTop: 90,
     color: "#212121",
@@ -151,7 +171,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 16,
     lineHeight: 19,
-    color: "#BDBDBD",
+    color: "#212121",
+    fontFamily: "Roboto-Regular",
   },
   btn: {
     marginTop: 24,
@@ -161,6 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    fontFamily: "Roboto-Regular",
   },
   btnTitle: {
     color: "#ffffff",
@@ -170,5 +192,6 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "center",
     marginTop: 16,
+    fontFamily: "Roboto-Regular",
   },
 });
