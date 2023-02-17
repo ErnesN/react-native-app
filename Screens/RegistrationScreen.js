@@ -1,45 +1,139 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
   TextInput,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+};
+
 export default function RegistrationScreen() {
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
+
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    setState(initialState);
+  };
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        style={styles.bcgimage}
-        source={require("../assets/images/Photo-BG.jpg")}
-      >
-        <View style={styles.form}>
-          <Text style={styles.title}>Реєстрація</Text>
-          <TextInput style={styles.input} placeholder={"Логін"} />
-          <TextInput style={styles.input} placeholder={"Електронна пошта"} />
-          <TextInput style={styles.input} placeholder={"Пароль"} />
-        </View>
-      </ImageBackground>
-    </View>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.bcgimage}
+          source={require("../assets/images/Photo-BG.jpg")}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <View style={styles.formBox}>
+              <View
+                style={{
+                  ...styles.form,
+                  marginBottom: isShowKeyboard ? -95 : 85,
+                }}
+              >
+                <View style={styles.photoBox}>
+                  <Image
+                    style={styles.photo}
+                    source={require("../assets/images/user.jpg")}
+                  />
+                </View>
+
+                <Text style={styles.title}>Реєстрація</Text>
+
+                <TextInput
+                  style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  value={state.login}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, login: value }))
+                  }
+                  placeholder={"Логін"}
+                />
+                <TextInput
+                  style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, email: value }))
+                  }
+                  placeholder={"Електронна пошта"}
+                />
+                <TextInput
+                  style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, password: value }))
+                  }
+                  secureTextEntry={true}
+                  placeholder={"Пароль"}
+                />
+
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.btn}
+                  onPress={keyboardHide}
+                >
+                  <Text style={styles.btnTitle}>Зареєструватись</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.text}>Вже маєте акаунт? Увійти</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
   },
   bcgimage: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
-  form: {
+  formBox: {
+    position: "relative",
     backgroundColor: "#ffffff",
-    borderRadius: 25,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  },
+  form: {
+    // marginHorizontal: 16,
+  },
+  photoBox: {
+    alignItems: "center",
+  },
+  photo: {
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+    position: "absolute",
+    top: -60,
   },
   title: {
+    marginBottom: 30,
+    marginTop: 90,
     color: "#212121",
     textAlign: "center",
     fontSize: 30,
@@ -48,6 +142,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: "#E8E8E8",
     borderRadius: 8,
@@ -57,5 +152,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: "#BDBDBD",
+  },
+  btn: {
+    marginTop: 24,
+    marginHorizontal: 16,
+    backgroundColor: "#FF6C00",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  btnTitle: {
+    color: "#ffffff",
+    fontSize: 16,
+    lineHeight: 19,
+  },
+  text: {
+    textAlign: "center",
+    marginTop: 16,
   },
 });
