@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,6 +11,7 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -31,6 +32,21 @@ export default function RegistrationScreen() {
     "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
     "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
   });
+
+  const [dimensions, setDimensions] = useState(
+    Dimensions.get("window").width - 8 * 2
+  );
+
+  useEffect(() => {
+    const OnChange = () => {
+      const width = Dimensions.get("window").width;
+    };
+    const dimensionsHandler = Dimensions.addEventListener("change", OnChange);
+    return () => {
+      dimensionsHandler.remove();
+    };
+  }, []);
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -61,7 +77,8 @@ export default function RegistrationScreen() {
               <View
                 style={{
                   ...styles.form,
-                  marginBottom: isShowKeyboard ? 0 : 85,
+                  marginBottom: isShowKeyboard ? -95 : 85,
+                  width: dimensions,
                 }}
               >
                 <Text style={styles.title}>Увійти</Text>
@@ -80,7 +97,10 @@ export default function RegistrationScreen() {
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.password}
                   onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
+                    setState((prevState) => ({
+                      ...prevState,
+                      password: value,
+                    }))
                   }
                   secureTextEntry={true}
                   placeholder={"Пароль"}
@@ -116,6 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
+    alignItems: "center",
   },
   formBox: {
     position: "relative",
@@ -143,7 +164,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E8E8E8",
     borderRadius: 8,
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
     backgroundColor: "#F6F6F6",
     paddingHorizontal: 16,
     fontSize: 16,
@@ -153,7 +174,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 24,
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
     backgroundColor: "#FF6C00",
     borderRadius: 100,
     justifyContent: "center",
