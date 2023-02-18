@@ -32,6 +32,22 @@ export default function RegistrationScreen() {
     "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
     "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
   });
+
+  const [dimensions, setDimensions] = useState(
+    Dimensions.get("window").width - 8 * 2
+  );
+
+  useEffect(() => {
+    const OnChange = () => {
+      const width = Dimensions.get("window").width;
+      setDimensions(width);
+    };
+    const dimensionsHandler = Dimensions.addEventListener("change", OnChange);
+    return () => {
+      dimensionsHandler.remove();
+    };
+  }, []);
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -63,6 +79,7 @@ export default function RegistrationScreen() {
                 style={{
                   ...styles.form,
                   marginBottom: isShowKeyboard ? -150 : 85,
+                  width: dimensions,
                 }}
               >
                 <View style={styles.photoBox}>
@@ -137,6 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    alignItems: "center",
   },
   form: {
     // marginHorizontal: 16,

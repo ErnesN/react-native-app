@@ -6,7 +6,6 @@ import {
   ImageBackground,
   TextInput,
   TouchableOpacity,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
@@ -40,6 +39,7 @@ export default function RegistrationScreen() {
   useEffect(() => {
     const OnChange = () => {
       const width = Dimensions.get("window").width;
+      setDimensions(width);
     };
     const dimensionsHandler = Dimensions.addEventListener("change", OnChange);
     return () => {
@@ -77,7 +77,7 @@ export default function RegistrationScreen() {
               <View
                 style={{
                   ...styles.form,
-                  marginBottom: isShowKeyboard ? -95 : 85,
+                  marginBottom: isShowKeyboard ? -80 : 85,
                   width: dimensions,
                 }}
               >
@@ -136,13 +136,13 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    alignItems: "center",
   },
   formBox: {
     position: "relative",
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    alignItems: "center",
   },
   form: {
     // marginHorizontal: 16,
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E8E8E8",
     borderRadius: 8,
-    // marginHorizontal: 16,
     backgroundColor: "#F6F6F6",
     paddingHorizontal: 16,
     fontSize: 16,
@@ -174,7 +173,6 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 24,
-    // marginHorizontal: 16,
     backgroundColor: "#FF6C00",
     borderRadius: 100,
     justifyContent: "center",
