@@ -61,7 +61,7 @@ export default function RegistrationScreen() {
               <View
                 style={{
                   ...styles.form,
-                  marginBottom: isShowKeyboard ? -95 : 85,
+                  marginBottom: isShowKeyboard ? -150 : 85,
                 }}
               >
                 <View style={styles.photoBox}>
