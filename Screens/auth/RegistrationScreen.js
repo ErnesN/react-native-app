@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,8 +13,6 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 
 const initialState = {
   login: "",
@@ -22,17 +20,9 @@ const initialState = {
   password: "",
 };
 
-SplashScreen.preventAutoHideAsync();
-
 export default function RegistrationScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
-  const [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  });
-
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 8 * 2
   );
@@ -54,22 +44,12 @@ export default function RegistrationScreen() {
     setState(initialState);
   };
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
+      <View style={styles.container}>
         <ImageBackground
           style={styles.bcgimage}
-          source={require("../assets/images/Photo-BG.jpg")}
+          source={require("../../assets/images/Photo-BG.jpg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -85,7 +65,7 @@ export default function RegistrationScreen() {
                 <View style={styles.photoBox}>
                   <Image
                     style={styles.photo}
-                    source={require("../assets/images/user.jpg")}
+                    source={require("../../assets/images/user.jpg")}
                   />
                 </View>
 
