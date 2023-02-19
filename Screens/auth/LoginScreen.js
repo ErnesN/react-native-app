@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import {
   StyleSheet,
   Text,
@@ -17,14 +19,20 @@ const initialState = {
   email: "",
   password: "",
 };
+SplashScreen.preventAutoHideAsync();
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
 
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 8 * 2
   );
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
+    "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
+  });
 
   useEffect(() => {
     const OnChange = () => {
@@ -37,6 +45,16 @@ export default function LoginScreen() {
     };
   }, []);
 
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -45,7 +63,7 @@ export default function LoginScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={onLayoutRootView}>
         <ImageBackground
           style={styles.bcgimage}
           source={require("../../assets/images/Photo-BG.jpg")}
@@ -93,7 +111,9 @@ export default function LoginScreen() {
                 >
                   <Text style={styles.btnTitle}>Увійти</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Registration")}
+                >
                   <Text style={styles.text}>
                     Не маєте акаунт? Зареєструватись
                   </Text>
@@ -169,5 +189,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 16,
     fontFamily: "Roboto-Regular",
+    color: "#1B4371",
+    lineHeight: 19,
+    fontSize: 16,
   },
 });
